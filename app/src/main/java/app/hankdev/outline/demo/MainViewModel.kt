@@ -3,11 +3,11 @@ package app.hankdev.outline.demo
 import androidx.lifecycle.ViewModel
 
 class MainViewModel : ViewModel() {
-    fun connect() {
-        println("connect")
+    fun startVpn() {
+        println("start VPN")
     }
 
-    fun disconnect() {
-        println("disconnect")
+    fun stopVpn() {
+        println("stop VPN")
     }
 }

@@ -1,8 +1,10 @@
 package app.hankdev.outline.demo
 
+import android.net.VpnService
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,6 +22,10 @@ import app.hankdev.outline.demo.ui.theme.Outlinegotun2socksdemoTheme
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels()
+    private val vpnPreparation = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result -> if (result.resultCode == RESULT_OK) viewModel.startVpn() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -33,16 +39,20 @@ class MainActivity : ComponentActivity() {
 
                     Column(verticalArrangement = Arrangement.Center) {
                         TextButton(name = "Connect", modifier) {
-                            viewModel.connect()
+                            startVpn()
                         }
                         TextButton(name = "Disconnect", modifier) {
-                            viewModel.disconnect()
+                            viewModel.stopVpn()
                         }
                     }
                 }
             }
         }
     }
+
+    private fun startVpn() = VpnService.prepare(this)?.let {
+        vpnPreparation.launch(it)
+    } ?: viewModel.startVpn()
 }
 
 @Composable
