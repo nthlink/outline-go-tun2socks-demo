@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
     private val vpnPreparation = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
-    ) { result -> if (result.resultCode == RESULT_OK) viewModel.startVpn() }
+    ) { result -> if (result.resultCode == RESULT_OK) viewModel.startVpn(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
                             startVpn()
                         }
                         TextButton(name = "Disconnect", modifier) {
-                            viewModel.stopVpn()
+                            viewModel.stopVpn(this@MainActivity)
                         }
                     }
                 }
@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
 
     private fun startVpn() = VpnService.prepare(this)?.let {
         vpnPreparation.launch(it)
-    } ?: viewModel.startVpn()
+    } ?: viewModel.startVpn(this)
 }
 
 @Composable
