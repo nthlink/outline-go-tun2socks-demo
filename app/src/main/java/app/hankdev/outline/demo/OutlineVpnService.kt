@@ -11,6 +11,12 @@ import kotlinx.coroutines.launch
 
 class OutlineVpnService : VpnService() {
     companion object {
+        private const val HOST = "205.134.180.130"
+        private const val PORT = 443
+        private const val PASSWORD = "NmFqHINId7op"
+        private const val METHOD = "chacha20-ietf-poly1305"
+        private const val PREFIX = "\u0000\u0080\u00ff"
+
         private const val TAG = "OutlineVpnService"
         private const val ACTION_START = "action.start"
         private const val ACTION_STOP = "action.stop"
@@ -58,7 +64,14 @@ class OutlineVpnService : VpnService() {
     }
 
     private fun start() = scope.launch(Dispatchers.IO) {
-
+        val config = """
+            {
+              "host": "$HOST",
+              "port": $PORT,
+              "method": "$METHOD",
+              "password": "$PASSWORD"
+            }
+        """.trimIndent()
     }
 
     private fun stop() {
