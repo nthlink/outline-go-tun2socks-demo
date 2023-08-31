@@ -98,12 +98,11 @@ class OutlineVpnService : VpnService() {
             return@launch
         }
 
-        var errorCode = ErrorCode.NO_ERROR
         if (!isAutoStart) {
             try {
                 // Do not perform connectivity checks when connecting on startup. We should avoid failing
                 // the connection due to a network error, as network may not be ready.
-                errorCode = checkServerConnectivity(client)
+                val errorCode = checkServerConnectivity(client)
                 if (!(errorCode == ErrorCode.NO_ERROR || errorCode == ErrorCode.UDP_RELAY_NOT_ENABLED)) {
                     return@launch
                 }
@@ -230,7 +229,19 @@ class OutlineVpnService : VpnService() {
     }
 
     private fun stop() {
+        stopVpnTunnel()
+        stopForeground()
+        stopSelf()
+    }
 
+    private fun stopVpnTunnel() {
+        vpnTunnel.disconnectTunnel()
+        vpnTunnel.tearDownVpn()
+    }
+
+    private fun stopForeground() {
+        stopForeground(true /* remove notification */)
+        notificationBuilder = null
     }
 
     override fun onRevoke() {
