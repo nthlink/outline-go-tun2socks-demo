@@ -1,2 +1,4 @@
 # outline-go-tun2socks-demo
-Outline go-tun2socks Demo
+
+An Android VPN demo that
+using [outline-go-tun2socks](https://github.com/Jigsaw-Code/outline-go-tun2socks)
